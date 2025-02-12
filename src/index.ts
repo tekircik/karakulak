@@ -5,6 +5,17 @@ import run from './generate';
 serve({
   port: process.env.PORT || 3000,
   fetch(req) {
+    // Handle CORS preflight request
+    if (req.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
+    }
     const { pathname } = new URL(req.url);
     if (req.method === 'POST' && pathname === '/gemini') {
       return handleGemini(req);
@@ -12,7 +23,8 @@ serve({
     return new Response(JSON.stringify({ message: 'You missed the exit.' }), {
       status: 405,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   }
@@ -27,7 +39,8 @@ async function handleGemini(req: any) {
     return new Response(JSON.stringify({ result: result }), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   } catch (error) {
@@ -37,7 +50,8 @@ async function handleGemini(req: any) {
       {
         status: 400,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       }
     );

@@ -1,0 +1,21 @@
+{
+  "name": "karakulak",
+  "module": "src/index.ts",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun run src/index.ts --watch",
+    "format": "prettier . --write"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "prettier": "^3.5.0"
+  }
+}

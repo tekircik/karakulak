@@ -26,7 +26,6 @@ async function run(message: string) {
     generationConfig
   });
   const result = await chatSession.sendMessage(message);
-  console.log(result.response.text());
   return result.response.text();
 }
 

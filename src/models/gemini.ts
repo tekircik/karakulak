@@ -4,8 +4,12 @@ import {
   HarmBlockThreshold
 } from '@google/generative-ai';
 
-const apiKey = process.env.GOOGLE_AI_KEY as string;
-const genAI = new GoogleGenerativeAI(apiKey);
+const googleApiKey = process.env.GOOGLE_AI_KEY as string;
+const genAI = new GoogleGenerativeAI(googleApiKey);
+
+// Simple in-memory cache
+const cache = new Map<string, { response: string; timestamp: number }>();
+const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours in milliseconds
 
 const model = genAI.getGenerativeModel({
   model: 'gemini-2.0-flash-lite-preview-02-05',
@@ -21,12 +25,27 @@ const generationConfig = {
   responseMimeType: 'text/plain'
 };
 
-async function run(message: string) {
+export async function gemini(message: string) {
+  // Check cache first
+  const cached = cache.get(message);
+  const now = Date.now();
+
+  if (cached && (now - cached.timestamp) < CACHE_TTL) {
+    return cached.response;
+  }
+
+  // If not in cache or expired, get new response
   const chatSession = model.startChat({
     generationConfig
   });
   const result = await chatSession.sendMessage(message);
-  return result.response.text();
-}
+  const response = result.response.text();
 
-export default run;
+  // Store in cache
+  cache.set(message, {
+    response,
+    timestamp: now
+  });
+
+  return response;
+}

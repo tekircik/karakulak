@@ -19,7 +19,7 @@ export async function llama(message: string) {
     }
 
     const stream = await scalewayClient.chat.completions.create({
-        model: 'llama-3.3-70b-instruct',
+        model: 'llama-3.1-8b-instruct',
         messages: [
             {
                 role: 'system',

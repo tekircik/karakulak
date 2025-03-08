@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
-    "openai": "^4.85.3",
+    "openai": "^4.86.2",
     "prettier": "^3.5.0"
   }
 }
